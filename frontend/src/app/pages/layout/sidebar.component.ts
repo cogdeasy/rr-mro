@@ -6,6 +6,7 @@ interface NavItem {
   name: string;
   path: string;
   icon: string;
+  exact?: boolean;
 }
 
 @Component({
@@ -25,6 +26,7 @@ interface NavItem {
         <a *ngFor="let item of navItems"
            [routerLink]="item.path"
            routerLinkActive="active"
+           [routerLinkActiveOptions]="{exact: !!item.exact}"
            class="nav-item"
            [title]="collapsed ? item.name : ''">
           <span class="nav-icon">{{ item.icon }}</span>
@@ -122,7 +124,7 @@ interface NavItem {
 export class SidebarComponent {
   collapsed = false;
   navItems: NavItem[] = [
-    { name: 'Dashboard', path: '/dashboard', icon: '\u{1F4CA}' },
+    { name: 'Dashboard', path: '/dashboard', icon: '\u{1F4CA}', exact: true },
     { name: 'Requests', path: '/dashboard/requests', icon: '\u{1F4CB}' },
     { name: 'AI Triage', path: '/dashboard/triage', icon: '\u{1F916}' },
     { name: 'Documents', path: '/dashboard/documents', icon: '\u{1F4C4}' },
