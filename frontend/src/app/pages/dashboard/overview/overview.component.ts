@@ -206,7 +206,7 @@ import { DashboardStats } from '../../../shared/models/variance-request.model';
               <td>{{ r.mroOrganisation }}</td>
               <td><span class="priority-badge" [ngClass]="r.priority?.toLowerCase()">{{ r.priority }}</span></td>
               <td><span class="status-badge" [ngClass]="r.status">{{ formatStatus(r.status) }}</span></td>
-              <td class="date-cell">{{ r.submittedAt | date:'dd MMM yyyy' }}</td>
+              <td class="date-cell">{{ r.createdAt | date:'dd MMM yyyy' }}</td>
             </tr>
           </tbody>
         </table>
