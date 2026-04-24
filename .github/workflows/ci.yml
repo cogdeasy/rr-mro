@@ -37,9 +37,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Typecheck (Angular compiler)
-        run: npx ng build --configuration production --no-progress 2>&1 | head -200
-        # Angular's AOT compiler performs full type-checking during build
+      - name: Typecheck & Build (Angular AOT compiler)
+        run: npx ng build --configuration production --no-progress
 
       - name: Unit tests
         run: npx ng test --watch=false --browsers=ChromeHeadless --no-progress
@@ -67,7 +66,7 @@ jobs:
         run: dotnet restore
 
       - name: Build (Release)
-        run: dotnet build --configuration Release --no-restore --warnaserrors
+        run: dotnet build --configuration Release --no-restore -p:TreatWarningsAsErrors=true
 
       - name: Test
-        run: dotnet test --configuration Release --no-build --verbosity normal 2>&1 || echo "No test projects found — skipping"
+        run: dotnet test --configuration Release --no-build --verbosity normal
