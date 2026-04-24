@@ -9,8 +9,12 @@ import { filter } from 'rxjs/operators';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, CommonModule, HeaderComponent, FooterComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  template: `
+    <app-header></app-header>
+    <router-outlet></router-outlet>
+    <app-footer *ngIf="showFooter"></app-footer>
+  `,
+  styles: []
 })
 export class AppComponent {
   title = 'RR MRO Variance Platform';

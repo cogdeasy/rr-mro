@@ -7,6 +7,7 @@ namespace RR.MRO.Api.Services;
 public class VarianceRequestService
 {
     private readonly List<VarianceRequest> _requests;
+    private readonly object _lock = new();
 
     public VarianceRequestService()
     {
@@ -19,6 +20,8 @@ public class VarianceRequestService
         string? engineType = null, string? mroOrganisation = null,
         string? search = null, string? sortBy = null, string? sortDir = "desc")
     {
+      lock (_lock)
+      {
         var query = _requests.AsEnumerable();
 
         if (!string.IsNullOrEmpty(status))
@@ -54,9 +57,10 @@ public class VarianceRequestService
             )).ToList();
 
         return new PagedResult<VarianceRequestSummaryDto>(items, totalCount, page, pageSize);
+      }
     }
 
-    public VarianceRequest? GetById(Guid id) => _requests.FirstOrDefault(r => r.Id == id);
+    public VarianceRequest? GetById(Guid id) { lock (_lock) { return _requests.FirstOrDefault(r => r.Id == id); } }
 
     public VarianceRequest Create(CreateVarianceRequestDto dto)
     {
@@ -86,7 +90,7 @@ public class VarianceRequestService
             RequestId = request.Id
         });
 
-        _requests.Add(request);
+        lock (_lock) { _requests.Add(request); }
         return request;
     }
 
@@ -132,6 +136,8 @@ public class VarianceRequestService
 
     public DashboardStatsDto GetStats()
     {
+      lock (_lock)
+      {
         var now = DateTime.UtcNow;
         var completedRequests = _requests.Where(r => r.ResolvedAt.HasValue).ToList();
         var avgDays = completedRequests.Any()
@@ -152,6 +158,7 @@ public class VarianceRequestService
             ByPriority: _requests.GroupBy(r => r.Priority.ToString()).ToDictionary(g => g.Key, g => g.Count()),
             MonthlyTrend: GetMonthlyTrend()
         );
+      }
     }
 
     private List<MonthlyTrendDto> GetMonthlyTrend()

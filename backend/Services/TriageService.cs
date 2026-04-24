@@ -5,7 +5,7 @@ namespace RR.MRO.Api.Services;
 public class TriageService
 {
     private readonly VarianceRequestService _requestService;
-    private static readonly Random _random = new(42);
+    private static readonly Random _random = Random.Shared;
 
     public TriageService(VarianceRequestService requestService)
     {
