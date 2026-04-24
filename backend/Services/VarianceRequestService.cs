@@ -143,6 +143,60 @@ public class VarianceRequestService
       }
     }
 
+    public VarianceRequest? ApplyTriageResult(Guid requestId, TriageResult result, string severityClassification)
+    {
+      lock (_lock)
+      {
+        var request = _requests.FirstOrDefault(r => r.Id == requestId);
+        if (request == null) return null;
+
+        request.TriageResult = result;
+
+        if (request.Status == RequestStatus.Submitted || request.Status == RequestStatus.UnderReview)
+        {
+            var oldStatus = request.Status.ToString();
+            request.Status = RequestStatus.TriageComplete;
+            request.UpdatedAt = DateTime.UtcNow;
+
+            request.AuditTrail.Add(new AuditEntry
+            {
+                Action = "StatusChanged",
+                Details = $"AI Triage completed. Status changed from {oldStatus} to TriageComplete. Severity: {severityClassification}",
+                Actor = "System (Triage Agent)",
+                PreviousValue = oldStatus,
+                NewValue = "TriageComplete",
+                RequestId = requestId
+            });
+        }
+
+        return request;
+      }
+    }
+
+    public VarianceDocument? ApplyGeneratedDocument(Guid requestId, VarianceDocument document, string authoredBy)
+    {
+      lock (_lock)
+      {
+        var request = _requests.FirstOrDefault(r => r.Id == requestId);
+        if (request == null) return null;
+
+        request.GeneratedDocument = document;
+        request.Status = RequestStatus.DocumentAuthored;
+        request.UpdatedAt = DateTime.UtcNow;
+
+        request.AuditTrail.Add(new AuditEntry
+        {
+            Action = "DocumentGenerated",
+            Details = $"Variance document {document.DocumentNumber} generated ({document.AiGeneratedPercentage:F1}% AI-assisted)",
+            Actor = authoredBy,
+            ActorRole = "Lead Engineer",
+            RequestId = requestId
+        });
+
+        return document;
+      }
+    }
+
     public DashboardStatsDto GetStats()
     {
       lock (_lock)

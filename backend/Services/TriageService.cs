@@ -17,10 +17,12 @@ public class TriageService
         var request = _requestService.GetById(requestId);
         if (request == null) return null;
 
+        var severityClassification = ClassifySeverity(request);
+
         var result = new TriageResult
         {
             RequestId = requestId,
-            SeverityClassification = ClassifySeverity(request),
+            SeverityClassification = severityClassification,
             RecommendedAction = GetRecommendedAction(request),
             SuggestedSpecialist = SuggestSpecialist(request),
             ConfidenceScore = 0.82 + _random.NextDouble() * 0.15,
@@ -31,13 +33,7 @@ public class TriageService
             SuggestedRfiQuestions = GenerateRfiQuestions(request)
         };
 
-        request.TriageResult = result;
-
-        if (request.Status == RequestStatus.Submitted || request.Status == RequestStatus.UnderReview)
-        {
-            request.Status = RequestStatus.TriageComplete;
-            request.UpdatedAt = DateTime.UtcNow;
-        }
+        _requestService.ApplyTriageResult(requestId, result, severityClassification);
 
         return result;
     }

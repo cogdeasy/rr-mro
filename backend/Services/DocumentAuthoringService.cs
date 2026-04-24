@@ -28,7 +28,7 @@ public class DocumentAuthoringService
             RegulatoryReferences = GenerateRegulatoryRefs(request),
             SpecialistRecommendation = GenerateSpecialistRec(request),
             ApplicableRegulations = "EASA CS-E 520, CS-E 740; FAR 33.70, 33.75; ICAO Annex 8",
-            AiGeneratedPercentage = 58 + new Random().NextDouble() * 20,
+            AiGeneratedPercentage = 58 + Random.Shared.NextDouble() * 20,
             AuthoredBy = authoredBy,
             Signatures = new List<DocumentSignature>
             {
@@ -38,18 +38,7 @@ public class DocumentAuthoringService
             }
         };
 
-        request.GeneratedDocument = document;
-        request.Status = RequestStatus.DocumentAuthored;
-        request.UpdatedAt = DateTime.UtcNow;
-
-        request.AuditTrail.Add(new AuditEntry
-        {
-            Action = "DocumentGenerated",
-            Details = $"Variance document {document.DocumentNumber} generated ({document.AiGeneratedPercentage:F1}% AI-assisted)",
-            Actor = authoredBy,
-            ActorRole = "Lead Engineer",
-            RequestId = requestId
-        });
+        _requestService.ApplyGeneratedDocument(requestId, document, authoredBy);
 
         return document;
     }
