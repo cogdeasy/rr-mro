@@ -51,7 +51,7 @@ public class DocumentAuthoringService
 
     private static string GenerateProblemStatement(VarianceRequest request)
     {
-        return $"During scheduled maintenance activities at {request.MroOrganisation} ({request.MroSiteLocation}), " +
+        return $"During scheduled maintenance activities at {request.MroOrganisation}{(string.IsNullOrEmpty(request.MroSiteLocation) ? "" : $" ({request.MroSiteLocation})")}, " +
                $"a non-conformance was identified on {request.EngineType} engine serial number {request.EngineSerialNumber}. " +
                $"\n\n{request.Description}\n\n" +
                $"This variance falls outside the limits defined in the approved maintenance data and requires " +
@@ -62,7 +62,7 @@ public class DocumentAuthoringService
     {
         return $"1. INSPECTION FINDINGS\n" +
                $"The {request.AnomalyType.ToLower()} was identified during {GetInspectionType(request.AnomalyType)} inspection. " +
-               $"Part number {request.PartNumber} was assessed against the applicable limits in the current revision " +
+               $"Part number {(string.IsNullOrEmpty(request.PartNumber) ? "N/A" : request.PartNumber)} was assessed against the applicable limits in the current revision " +
                $"of the Engine Shop Manual and Structural Repair Manual.\n\n" +
                $"2. HISTORICAL PRECEDENT\n" +
                $"Analysis of the variance database identified similar cases on the {request.EngineType} fleet. " +
