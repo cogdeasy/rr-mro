@@ -116,7 +116,7 @@ public static class SeedData
                 });
             }
 
-            if (item.Status >= RequestStatus.RecommendationDrafted)
+            if (item.Status >= RequestStatus.TriageComplete)
             {
                 request.TriageResult = new TriageResult
                 {
