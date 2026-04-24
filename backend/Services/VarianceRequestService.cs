@@ -181,7 +181,10 @@ public class VarianceRequestService
         if (request == null) return null;
 
         request.GeneratedDocument = document;
-        request.Status = RequestStatus.DocumentAuthored;
+        if (request.Status < RequestStatus.DocumentAuthored)
+        {
+            request.Status = RequestStatus.DocumentAuthored;
+        }
         request.UpdatedAt = DateTime.UtcNow;
 
         request.AuditTrail.Add(new AuditEntry
