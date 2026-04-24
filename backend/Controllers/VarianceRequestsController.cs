@@ -56,9 +56,16 @@ public class VarianceRequestsController : ControllerBase
     [HttpPatch("{id:guid}/status")]
     public ActionResult UpdateStatus(Guid id, [FromBody] UpdateStatusRequest body)
     {
-        var request = _service.UpdateStatus(id, body.Status, body.Actor);
-        if (request == null) return NotFound();
-        return Ok(request);
+        try
+        {
+            var request = _service.UpdateStatus(id, body.Status, body.Actor);
+            if (request == null) return NotFound();
+            return Ok(request);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
     [HttpPost("{id:guid}/comments")]

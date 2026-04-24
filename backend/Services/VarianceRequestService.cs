@@ -107,11 +107,14 @@ public class VarianceRequestService
         if (request == null) return null;
 
         if (!Enum.TryParse<RequestStatus>(newStatus, true, out var parsedStatus))
-            return null;
+            throw new ArgumentException($"Invalid status: {newStatus}");
 
         var oldStatus = request.Status.ToString();
         request.Status = parsedStatus;
         request.UpdatedAt = DateTime.UtcNow;
+
+        if (parsedStatus == RequestStatus.Completed)
+            request.ResolvedAt = DateTime.UtcNow;
 
         request.AuditTrail.Add(new AuditEntry
         {
