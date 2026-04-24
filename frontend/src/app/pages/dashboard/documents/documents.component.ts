@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../../shared/services/api.service';
-import { VarianceRequestSummary } from '../../../shared/models/variance-request.model';
+import { VarianceRequestSummary, STATUS_CSS, STATUS_LABELS } from '../../../shared/models/variance-request.model';
 
 @Component({
   selector: 'app-documents',
@@ -48,7 +48,7 @@ import { VarianceRequestSummary } from '../../../shared/models/variance-request.
               <td class="td" style="max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.title }}</td>
               <td class="td muted">{{ r.engineType }}</td>
               <td class="td muted">{{ r.mroOrganisation }}</td>
-              <td class="td"><span class="badge" [ngClass]="r.status.toLowerCase()">{{ r.status }}</span></td>
+              <td class="td"><span class="badge" [ngClass]="getStatusCss(r.status)">{{ getStatusLabel(r.status) }}</span></td>
               <td class="td">
                 <a [routerLink]="['/dashboard/requests', r.id]" style="font-size:0.8125rem;color:var(--rr-navy);font-weight:500">View</a>
               </td>
@@ -84,6 +84,9 @@ import { VarianceRequestSummary } from '../../../shared/models/variance-request.
 export class DocumentsComponent implements OnInit {
   documentedRequests: VarianceRequestSummary[] = [];
   approvedCount = 0;
+
+  getStatusCss(status: string): string { return STATUS_CSS[status] || status.toLowerCase(); }
+  getStatusLabel(status: string): string { return STATUS_LABELS[status] || status; }
 
   documentSections = [
     'Problem Statement',

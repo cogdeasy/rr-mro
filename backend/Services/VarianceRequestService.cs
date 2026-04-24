@@ -119,10 +119,10 @@ public class VarianceRequestService
         request.AuditTrail.Add(new AuditEntry
         {
             Action = "StatusChanged",
-            Details = $"Status changed from {oldStatus} to {newStatus}",
+            Details = $"Status changed from {oldStatus} to {parsedStatus}",
             Actor = actor,
             PreviousValue = oldStatus,
-            NewValue = newStatus,
+            NewValue = parsedStatus.ToString(),
             RequestId = request.Id
         });
 
