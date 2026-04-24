@@ -222,6 +222,7 @@ public class VarianceRequestService
             TotalRequests: _requests.Count,
             Submitted: _requests.Count(r => r.Status == RequestStatus.Submitted),
             UnderReview: _requests.Count(r => r.Status == RequestStatus.UnderReview),
+            TriageComplete: _requests.Count(r => r.Status == RequestStatus.TriageComplete),
             SpecialistOpinion: _requests.Count(r => r.Status == RequestStatus.SpecialistOpinion),
             RecommendationDrafted: _requests.Count(r => r.Status == RequestStatus.RecommendationDrafted),
             DocumentAuthored: _requests.Count(r => r.Status == RequestStatus.DocumentAuthored),

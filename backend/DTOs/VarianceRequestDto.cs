@@ -44,6 +44,7 @@ public record DashboardStatsDto(
     int TotalRequests,
     int Submitted,
     int UnderReview,
+    int TriageComplete,
     int SpecialistOpinion,
     int RecommendationDrafted,
     int DocumentAuthored,

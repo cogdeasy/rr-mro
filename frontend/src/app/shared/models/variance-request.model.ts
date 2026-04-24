@@ -129,6 +129,7 @@ export interface DashboardStats {
   totalRequests: number;
   submitted: number;
   underReview: number;
+  triageComplete: number;
   specialistOpinion: number;
   recommendationDrafted: number;
   documentAuthored: number;

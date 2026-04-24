@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { LandingComponent } from './pages/landing/landing.component';
 import { SubmitComponent } from './pages/submit/submit.component';
 import { TrackComponent } from './pages/track/track.component';
 import { DashboardLayoutComponent } from './pages/dashboard/dashboard-layout.component';
@@ -12,9 +11,7 @@ import { TriageComponent } from './pages/dashboard/triage/triage.component';
 import { SettingsComponent } from './pages/dashboard/settings/settings.component';
 
 export const routes: Routes = [
-  { path: '', component: LandingComponent },
-  { path: 'submit', component: SubmitComponent },
-  { path: 'track', component: TrackComponent },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
     path: 'dashboard',
     component: DashboardLayoutComponent,
@@ -22,11 +19,13 @@ export const routes: Routes = [
       { path: '', component: OverviewComponent },
       { path: 'requests', component: RequestsComponent },
       { path: 'requests/:id', component: RequestDetailComponent },
+      { path: 'submit', component: SubmitComponent },
+      { path: 'track', component: TrackComponent },
       { path: 'ai-assist', component: AiAssistComponent },
       { path: 'documents', component: DocumentsComponent },
       { path: 'triage', component: TriageComponent },
       { path: 'settings', component: SettingsComponent },
     ]
   },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: 'dashboard' }
 ];
