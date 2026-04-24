@@ -189,7 +189,7 @@ public class VarianceRequestService
         if (request == null) return null;
 
         request.GeneratedDocument = document;
-        if (request.Status < RequestStatus.DocumentAuthored)
+        if (request.Status < RequestStatus.DocumentAuthored && request.Status >= RequestStatus.RecommendationDrafted)
         {
             request.Status = RequestStatus.DocumentAuthored;
         }

@@ -83,3 +83,8 @@ public record PagedResult<T>(
     int Page,
     int PageSize
 );
+
+public record UpdateStatusRequest(
+    string Status,
+    string Actor
+);

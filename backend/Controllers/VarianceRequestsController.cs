@@ -91,5 +91,3 @@ public class VarianceRequestsController : ControllerBase
     [HttpGet("anomaly-types")]
     public ActionResult GetAnomalyTypes() => Ok(Data.SeedData.AnomalyTypes);
 }
-
-public record UpdateStatusRequest(string Status, string Actor);
