@@ -64,6 +64,8 @@ public class VarianceRequestService
 
     public VarianceRequest Create(CreateVarianceRequestDto dto)
     {
+      lock (_lock)
+      {
         var request = new VarianceRequest
         {
             ReferenceNumber = $"VR-2025-{_requests.Count + 1001}",
@@ -90,13 +92,16 @@ public class VarianceRequestService
             RequestId = request.Id
         });
 
-        lock (_lock) { _requests.Add(request); }
+        _requests.Add(request);
         return request;
+      }
     }
 
     public VarianceRequest? UpdateStatus(Guid id, string newStatus, string actor)
     {
-        var request = GetById(id);
+      lock (_lock)
+      {
+        var request = _requests.FirstOrDefault(r => r.Id == id);
         if (request == null) return null;
 
         var oldStatus = request.Status.ToString();
@@ -114,11 +119,14 @@ public class VarianceRequestService
         });
 
         return request;
+      }
     }
 
     public Comment? AddComment(Guid requestId, AddCommentDto dto)
     {
-        var request = GetById(requestId);
+      lock (_lock)
+      {
+        var request = _requests.FirstOrDefault(r => r.Id == requestId);
         if (request == null) return null;
 
         var comment = new Comment
@@ -132,6 +140,7 @@ public class VarianceRequestService
 
         request.Comments.Add(comment);
         return comment;
+      }
     }
 
     public DashboardStatsDto GetStats()
