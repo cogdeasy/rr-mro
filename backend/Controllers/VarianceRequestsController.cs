@@ -42,8 +42,15 @@ public class VarianceRequestsController : ControllerBase
     [HttpPost]
     public ActionResult Create([FromBody] CreateVarianceRequestDto dto)
     {
-        var request = _service.Create(dto);
-        return CreatedAtAction(nameof(GetById), new { id = request.Id }, request);
+        try
+        {
+            var request = _service.Create(dto);
+            return CreatedAtAction(nameof(GetById), new { id = request.Id }, request);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
     [HttpPatch("{id:guid}/status")]

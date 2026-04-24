@@ -76,7 +76,9 @@ public class VarianceRequestService
             EngineSerialNumber = dto.EngineSerialNumber,
             PartNumber = dto.PartNumber,
             AircraftRegistration = dto.AircraftRegistration,
-            Priority = Enum.Parse<Priority>(dto.Priority, true),
+            Priority = Enum.TryParse<Priority>(dto.Priority, true, out var parsedPriority)
+                ? parsedPriority
+                : throw new ArgumentException($"Invalid priority: {dto.Priority}"),
             SubmittedBy = dto.SubmittedBy,
             MroOrganisation = dto.MroOrganisation,
             MroSiteLocation = dto.MroSiteLocation,
@@ -104,8 +106,11 @@ public class VarianceRequestService
         var request = _requests.FirstOrDefault(r => r.Id == id);
         if (request == null) return null;
 
+        if (!Enum.TryParse<RequestStatus>(newStatus, true, out var parsedStatus))
+            return null;
+
         var oldStatus = request.Status.ToString();
-        request.Status = Enum.Parse<RequestStatus>(newStatus, true);
+        request.Status = parsedStatus;
         request.UpdatedAt = DateTime.UtcNow;
 
         request.AuditTrail.Add(new AuditEntry

@@ -91,10 +91,13 @@ public class TriageService
 
     private static string GenerateRagSummary(VarianceRequest request)
     {
+        var repairPct = _random.Next(45, 65);
+        var replacePct = _random.Next(20, 35);
+        var monitorPct = 100 - repairPct - replacePct;
         return $"Analysed 15,247 historical variance records. Found {_random.Next(8, 45)} closely matching cases " +
                $"for {request.AnomalyType} on {request.EngineType} engines. Historical resolution breakdown: " +
-               $"repair-in-situ ({_random.Next(40, 65)}%), component replacement ({_random.Next(20, 35)}%), " +
-               $"use-as-is with monitoring ({_random.Next(5, 15)}%). Average resolution time: {_random.Next(8, 21)} days.";
+               $"repair-in-situ ({repairPct}%), component replacement ({replacePct}%), " +
+               $"use-as-is with monitoring ({monitorPct}%). Average resolution time: {_random.Next(8, 21)} days.";
     }
 
     private static List<string> GenerateRfiQuestions(VarianceRequest request)
