@@ -9,7 +9,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   template: `
     <header class="header">
       <div class="header-left">
-        <span class="logo-rr">RR</span>
+        <span class="logo-rr">ROLLS-ROYCE</span>
         <span class="logo-divider"></span>
         <span class="logo-text">MRO Variance Platform</span>
       </div>

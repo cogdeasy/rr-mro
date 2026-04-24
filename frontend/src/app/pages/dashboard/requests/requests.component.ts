@@ -16,7 +16,7 @@ import { VarianceRequestSummary, STATUS_LABELS, STATUS_CSS } from '../../../shar
           <h1 style="font-size:1.5rem;font-weight:700;margin-bottom:0.25rem">Variance Requests</h1>
           <p style="font-size:0.875rem;color:var(--rr-muted)">{{ totalCount }} requests across the MRO network</p>
         </div>
-        <a routerLink="/submit" class="btn-navy">New Request</a>
+        <a routerLink="/dashboard/submit" class="btn-navy">New Request</a>
       </div>
 
       <div class="card" style="margin-bottom:1rem;padding:1rem">
