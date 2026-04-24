@@ -1,47 +1,63 @@
 # Rolls-Royce MRO Variance Platform
 
-Enterprise platform for managing Non-Conformance Technical Variance requests across the Rolls-Royce civil aerospace engine MRO network.
+Enterprise platform for managing Non-Conformance Technical Variance (NCTV) requests across the Rolls-Royce civil aerospace engine MRO network.
 
-## Overview
+## Business Context
 
-When an engine undergoing Maintenance, Repair & Overhaul (MRO) encounters an issue outside the standard manual, every non-standard action requires a formal regulated variance. This platform digitises the entire variance lifecycle:
+Currently, the process of sending variation requests, processing by internal engineering teams, and communication of final decisions are done through emails, manual updates to a Word file, manual search of similar deviations resolved earlier, review of drawings, technical publications and other documents relevant to each case. Workflow is managed through a Kanban board application.
 
-1. **Request Submission** — MRO partners submit structured variance requests with anomaly details, photographs, and engineering drawings
-2. **AI-Assisted Triage** — Automated scoping and classification of requests using historical variance data
-3. **Document Authoring** — RAG-powered generation of 27-page regulated documentation packages
-4. **Workflow Management** — End-to-end tracking from submission through specialist review to final disposition
-5. **Audit Trail** — Complete regulatory compliance trail with digital signatures
+The Infosys Team on this project is building the application to **digitise these manual processes**, **exploit AI to optimise them**, and **manage the end-to-end workflow**.
+
+### Key Objectives
+
+1. **Digital MRO Portal** — A platform accessed by MRO organisations to submit Variation Resolution requests (anomaly details, engineering drawings, photographs). This was partly developed by another team and is being transitioned to Infosys for complete development, including integration with AI Assist to ensure initial requests are submitted with correct and complete information.
+
+2. **Internal Workflow Digitisation** — Extend the platform as a Micro Front End (MFE) application to digitise the internal process end-to-end: different actors review the request, decide on resolution path, secure specialist opinion and final recommendation, and prepare/author a final document for the MRO. Includes workflow management, statuses, notifications, collaboration, audit trail, and digital signatures of authorised signatories.
+
+3. **AI Assist Integration** — At multiple stages (initial request submission, document authoring, specialist recommendation drafting), AI Assist (using OpenAI GPT, RAG, and customised instructions) reduces submission errors, parses through relevant past requests, submitted drawings, reference publications and historical data to generate content — including applicable safety regulations — which is then reviewed and updated by the human in the loop.
+
+### Manual Process Being Digitised
+
+| Before (Manual)                        | After (Digital Platform)                         |
+|----------------------------------------|--------------------------------------------------|
+| Email-based request submission         | Structured digital intake with AI validation     |
+| Word document updates                  | Versioned document authoring with digital signatures |
+| Manual search of past deviations       | AI-powered RAG over 15,000+ historical records   |
+| Kanban board workflow tracking         | End-to-end workflow with status, notifications, audit trail |
+| Physical signature collection          | Digital signatures of authorised signatories     |
+| Manual review of drawings/publications | AI-parsed drawings, reference publications, historical data |
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                   MRO Portal                         │
-│  (External MRO partners submit & track requests)     │
-├─────────────────────────────────────────────────────┤
-│                 Internal Dashboard                    │
-│  ┌──────────┐ ┌──────────┐ ┌───────────────────┐   │
-│  │ Triage   │ │ Document │ │ Workflow Engine    │   │
-│  │ Agent    │ │ Authoring│ │ (Status, Reviews,  │   │
-│  │ (AI)     │ │ Agent    │ │  Approvals)        │   │
-│  └────┬─────┘ └────┬─────┘ └────────┬──────────┘   │
-│       │             │                │               │
-│  ┌────┴─────────────┴────────────────┴──────────┐   │
-│  │           Variance Data Store                 │   │
-│  │  (Requests, Documents, Attachments, Audit)    │   │
-│  └───────────────────────────────────────────────┘   │
-├─────────────────────────────────────────────────────┤
-│              Azure Infrastructure                    │
-│  App Service · Azure SQL · Blob Storage · OpenAI     │
-└─────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────┐
+│                   MRO Portal (MFE)                       │
+│  (External MRO partners submit & track requests)         │
+├─────────────────────────────────────────────────────────┤
+│                 Internal Dashboard (MFE)                  │
+│  ┌──────────────┐ ┌──────────────┐ ┌─────────────────┐  │
+│  │ AI Assist    │ │ Document     │ │ Workflow Engine  │  │
+│  │ (Initiate +  │ │ Authoring    │ │ (Status, Reviews │  │
+│  │  Triage +    │ │ Agent (RAG)  │ │  Approvals,      │  │
+│  │  Recommend)  │ │              │ │  Digital Sigs)   │  │
+│  └──────┬───────┘ └──────┬───────┘ └────────┬────────┘  │
+│         │                │                   │           │
+│  ┌──────┴────────────────┴───────────────────┴────────┐  │
+│  │              Variance Data Store                    │  │
+│  │  (Requests, Documents, Attachments, Audit Trail)    │  │
+│  └─────────────────────────────────────────────────────┘  │
+├─────────────────────────────────────────────────────────┤
+│               Azure Infrastructure + Databricks          │
+│  App Service · Azure SQL · Blob Storage · OpenAI · RAG   │
+└─────────────────────────────────────────────────────────┘
 ```
 
 ## Tech Stack
 
-- **Frontend**: Angular 17 (standalone components, SCSS, TypeScript)
+- **Frontend**: Angular 17 (standalone components, SCSS, TypeScript) — Micro Front End architecture
 - **Backend**: ASP.NET Core 8 Web API (C#)
-- **AI/ML**: Azure OpenAI GPT-4, RAG over historical variances (Databricks)
-- **Infrastructure**: Azure App Service, Azure SQL, Azure Blob Storage
+- **AI/ML**: Azure OpenAI GPT-4, RAG over 15,000+ historical variances, customised instructions (Databricks)
+- **Infrastructure**: Azure App Service, Azure SQL, Azure Blob Storage, Databricks
 - **Auth**: Azure AD B2C (MRO partners) + Azure AD (internal)
 
 ## Getting Started
@@ -103,15 +119,17 @@ frontend/
 ### Variance Request Lifecycle
 
 ```
-Submitted → Under Review → Specialist Opinion → Recommendation Drafted → Approved → Completed
-                                                                      ↘ Rejected
+Submitted → Under Review → Triage Complete → Specialist Opinion → Recommendation Drafted → Document Authored → Approved → Completed
+                                                                                                              ↘ Rejected
 ```
 
-### AI Agents
+### AI Assist Stages
 
-- **Initiate Agent**: Front-loads questions at submission to reduce RFI cycles
-- **Scoping/Triage Agent**: Classifies anomaly type, severity, and routes to appropriate specialist
-- **Document Authoring Agent**: RAG over 15,000+ prior variances for 60-70% effort reduction in documentation
+AI Assist (OpenAI GPT, RAG, customised instructions) is integrated at multiple stages:
+
+1. **Initial Request Submission (Initiate Agent)** — Validates MRO submissions for completeness and correctness, reducing RFI cycles. Ensures all required fields, drawings, and photographs are provided.
+2. **Specialist Recommendation Drafting (Triage Agent)** — Classifies anomaly type and severity, searches 15,000+ historical records, parses relevant drawings and reference publications, routes to appropriate specialist.
+3. **Document Authoring (Authoring Agent)** — RAG-powered generation of regulated documentation including applicable safety regulations, achieving 60-70% effort reduction. Content reviewed and updated by human in the loop.
 
 ## Environment Variables
 
