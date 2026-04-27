@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getStats, getRequests } from '../api/apiService';
 import type { DashboardStats, VarianceRequestSummary } from '../types/variance-request';
 import clsx from 'clsx';
 import './Overview.scss';
 
 export default function Overview() {
+  const navigate = useNavigate();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [engineEntries, setEngineEntries] = useState<[string, number][]>([]);
   const [mroEntries, setMroEntries] = useState<[string, number][]>([]);
@@ -249,7 +250,7 @@ export default function Overview() {
                 </thead>
                 <tbody>
                   {recentRequests.slice(0, 6).map(r => (
-                    <tr key={r.id} className="clickable-row" onClick={() => { window.location.href = `/dashboard/requests/${r.id}`; }}>
+                    <tr key={r.id} className="clickable-row" onClick={() => navigate(`/dashboard/requests/${r.id}`)}>
                       <td className="ref-cell">{r.referenceNumber}</td>
                       <td className="title-cell">{r.title}</td>
                       <td>{r.engineType}</td>

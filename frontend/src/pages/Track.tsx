@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import { getRequests } from '../api/apiService';
@@ -17,7 +17,7 @@ export default function Track() {
   const [totalPages, setTotalPages] = useState(1);
   const statusOptions = Object.entries(STATUS_LABELS).map(([value, label]) => ({ value, label }));
 
-  function loadRequests(p = page) {
+  const loadRequests = useCallback((p: number) => {
     getRequests({
       page: p, pageSize,
       status: statusFilter || undefined,
@@ -29,11 +29,13 @@ export default function Track() {
       setTotalCount(result.totalCount);
       setTotalPages(Math.ceil(result.totalCount / pageSize));
     });
-  }
+  }, [search, statusFilter, priorityFilter]);
 
-  useEffect(() => { loadRequests(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setPage(1);
+    loadRequests(1);
+  }, [loadRequests]);
 
-  function onFilter() { setPage(1); loadRequests(1); }
   function changePage(p: number) { setPage(p); loadRequests(p); }
   function formatDate(d: string) { return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); }
 
@@ -56,18 +58,18 @@ export default function Track() {
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'end' }}>
               <div className="form-group" style={{ marginBottom: 0, flex: 1, minWidth: '200px' }}>
                 <label>Search</label>
-                <input type="text" value={search} onChange={e => { setSearch(e.target.value); onFilter(); }} placeholder="Search by reference, title, or description" />
+                <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by reference, title, or description" />
               </div>
               <div className="form-group" style={{ marginBottom: 0, width: '160px' }}>
                 <label>Status</label>
-                <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); onFilter(); }}>
+                <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
                   <option value="">All Statuses</option>
                   {statusOptions.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                 </select>
               </div>
               <div className="form-group" style={{ marginBottom: 0, width: '160px' }}>
                 <label>Priority</label>
-                <select value={priorityFilter} onChange={e => { setPriorityFilter(e.target.value); onFilter(); }}>
+                <select value={priorityFilter} onChange={e => setPriorityFilter(e.target.value)}>
                   <option value="">All Priorities</option>
                   <option value="Critical">Critical</option>
                   <option value="High">High</option>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import { getRequests, getEngineTypes } from '../api/apiService';
@@ -20,7 +20,7 @@ export default function Requests() {
   const [totalPages, setTotalPages] = useState(1);
   const statusOptions = Object.entries(STATUS_LABELS).map(([value, label]) => ({ value, label }));
 
-  function loadRequests(p = page) {
+  const loadRequests = useCallback((p: number) => {
     getRequests({
       page: p, pageSize,
       status: statusFilter || undefined,
@@ -33,14 +33,17 @@ export default function Requests() {
       setTotalCount(r.totalCount);
       setTotalPages(Math.ceil(r.totalCount / pageSize));
     });
-  }
+  }, [search, statusFilter, priorityFilter, engineFilter]);
 
   useEffect(() => {
     getEngineTypes().then(setEngineTypesList);
-    loadRequests();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
-  function onFilter() { setPage(1); loadRequests(1); }
+  useEffect(() => {
+    setPage(1);
+    loadRequests(1);
+  }, [loadRequests]);
+
   function changePage(p: number) { setPage(p); loadRequests(p); }
 
   function formatDate(d: string) {
@@ -59,20 +62,20 @@ export default function Requests() {
 
       <div className="card" style={{ marginBottom: '1rem', padding: '1rem' }}>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-          <input type="text" value={search} onChange={e => { setSearch(e.target.value); onFilter(); }} placeholder="Search requests..."
+          <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search requests..."
             style={{ flex: 1, minWidth: '200px', padding: '0.5rem 0.75rem', fontSize: '0.8125rem', border: '1px solid var(--rr-border)', borderRadius: '0.375rem' }} />
-          <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); onFilter(); }} style={{ padding: '0.5rem 0.75rem', fontSize: '0.8125rem', border: '1px solid var(--rr-border)', borderRadius: '0.375rem' }}>
+          <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={{ padding: '0.5rem 0.75rem', fontSize: '0.8125rem', border: '1px solid var(--rr-border)', borderRadius: '0.375rem' }}>
             <option value="">All Statuses</option>
             {statusOptions.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
           </select>
-          <select value={priorityFilter} onChange={e => { setPriorityFilter(e.target.value); onFilter(); }} style={{ padding: '0.5rem 0.75rem', fontSize: '0.8125rem', border: '1px solid var(--rr-border)', borderRadius: '0.375rem' }}>
+          <select value={priorityFilter} onChange={e => setPriorityFilter(e.target.value)} style={{ padding: '0.5rem 0.75rem', fontSize: '0.8125rem', border: '1px solid var(--rr-border)', borderRadius: '0.375rem' }}>
             <option value="">All Priorities</option>
             <option value="Critical">Critical</option>
             <option value="High">High</option>
             <option value="Medium">Medium</option>
             <option value="Low">Low</option>
           </select>
-          <select value={engineFilter} onChange={e => { setEngineFilter(e.target.value); onFilter(); }} style={{ padding: '0.5rem 0.75rem', fontSize: '0.8125rem', border: '1px solid var(--rr-border)', borderRadius: '0.375rem' }}>
+          <select value={engineFilter} onChange={e => setEngineFilter(e.target.value)} style={{ padding: '0.5rem 0.75rem', fontSize: '0.8125rem', border: '1px solid var(--rr-border)', borderRadius: '0.375rem' }}>
             <option value="">All Engines</option>
             {engineTypesList.map(e => <option key={e} value={e}>{e}</option>)}
           </select>
