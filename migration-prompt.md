@@ -105,8 +105,8 @@
    export class ApiService {
      private baseUrl = 'http://localhost:5062/api';
      constructor(private http: HttpClient) {}
-     getRequests(): Observable<VarianceRequest[]> {
-       return this.http.get<VarianceRequest[]>(`${this.baseUrl}/variance`);
+     getRequests(params?: { page?: number; pageSize?: number; status?: string; ... }): Observable<PagedResult<VarianceRequestSummary>> {
+       return this.http.get<PagedResult<VarianceRequestSummary>>(`${this.baseUrl}/variancerequests`, { params: httpParams });
      }
    }
    ```
@@ -115,8 +115,9 @@
    ```typescript
    const BASE_URL = 'http://localhost:5062/api';
 
-   export async function getRequests(): Promise<VarianceRequest[]> {
-     const res = await fetch(`${BASE_URL}/variance`);
+   export async function getRequests(params?: Record<string, string>): Promise<PagedResult<VarianceRequestSummary>> {
+     const query = params ? '?' + new URLSearchParams(params).toString() : '';
+     const res = await fetch(`${BASE_URL}/variancerequests${query}`);
      if (!res.ok) throw new Error(`Failed to fetch requests: ${res.status}`);
      return res.json();
    }
