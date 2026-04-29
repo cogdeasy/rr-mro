@@ -13,7 +13,7 @@
   - `frontend/package.json` — dependencies (Angular 17.3.0, TypeScript ~5.4.2, RxJS ~7.8.0, zone.js ~0.14.3, Karma test runner)
   - `frontend/angular.json` — uses `@angular-devkit/build-angular:application` builder
   - `frontend/src/app/app.routes.ts` — 10 routes nested under `/dashboard` layout
-  - `frontend/src/app/shared/services/api.service.ts` — single centralized API service with 10 methods (`getRequests`, `getRequest`, `createRequest`, `updateStatus`, `addComment`, `getStats`, `triageRequest`, `generateDocument`, `getDocument`, `getEngineTypes`, `getMroOrganisations`, `getAnomalyTypes`), base URL `http://localhost:5062/api`
+  - `frontend/src/app/shared/services/api.service.ts` — single centralized API service with 12 methods (`getRequests`, `getRequest`, `createRequest`, `updateStatus`, `addComment`, `getStats`, `triageRequest`, `generateDocument`, `getDocument`, `getEngineTypes`, `getMroOrganisations`, `getAnomalyTypes`), base URL `http://localhost:5062/api`
   - `frontend/src/styles.scss` — global styles with CSS custom properties (`--rr-navy`, `--rr-silver`, `--rr-platinum`, `--rr-gold`, etc.), utility classes (`.btn-primary`, `.btn-secondary`, `.btn-navy`, `.btn-outline`, `.card`, `.badge`, `.form-group`)
   - `frontend/src/app/pages/dashboard/dashboard-layout.component.ts` — layout shell (Header + Sidebar + router-outlet)
 
@@ -21,7 +21,7 @@
 
 ## 2. Application Inventory
 
-### Components (15 total)
+### Components (15 total, 13 actively routed + 2 unused)
 
 | Component | File | Role |
 |-----------|------|------|
@@ -38,6 +38,8 @@
 | `DocumentsComponent` | `documents.component.ts` | Documents listing with `*ngFor` |
 | `AiAssistComponent` | `ai-assist.component.ts` | AI assistance page |
 | `SettingsComponent` | `settings.component.ts` | Settings page |
+| `LandingComponent` | `landing.component.ts` | Landing page (currently unrouted / unused) |
+| `FooterComponent` | `footer.component.ts` | Footer bar (currently unrouted / unused) |
 
 ### Services
 
@@ -123,7 +125,7 @@
    }
    ```
 
-3. All 10 API methods are straightforward `GET` / `POST` / `PATCH` calls with no complex RxJS operators — direct translation to `async` / `await`.
+3. All 12 API methods are straightforward `GET` / `POST` / `PATCH` calls with no complex RxJS operators — direct translation to `async` / `await`.
 4. Base URL: `http://localhost:5062/api` (unchanged).
 
 ### Phase 3: Layout Shell + Routing
@@ -361,7 +363,8 @@ frontend-react/
 │   │   ├── Triage.tsx
 │   │   ├── Documents.tsx
 │   │   ├── AiAssist.tsx
-│   │   └── Settings.tsx
+│   │   ├── Settings.tsx
+│   │   └── Landing.tsx             ← currently unused, migrate if wired up
 │   └── test-setup.ts
 └── ...
 ```
