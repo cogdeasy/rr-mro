@@ -6,6 +6,7 @@ namespace RR.MRO.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[AutoValidateAntiforgeryToken]
 public class DocumentsController : ControllerBase
 {
     private readonly DocumentAuthoringService _documentService;

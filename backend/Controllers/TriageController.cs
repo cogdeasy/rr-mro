@@ -5,6 +5,7 @@ namespace RR.MRO.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[AutoValidateAntiforgeryToken]
 public class TriageController : ControllerBase
 {
     private readonly TriageService _triageService;

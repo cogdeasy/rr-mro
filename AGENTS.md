@@ -4,7 +4,7 @@
 This is the Rolls-Royce MRO (Maintenance, Repair & Overhaul) Variance Platform. It digitises the Non-Conformance Technical Variance process for civil aerospace engines.
 
 ## Tech Stack
-- **Frontend**: Angular 17 (standalone components, SCSS, TypeScript)
+- **Frontend**: Angular 19 (standalone components, SCSS, TypeScript)
 - **Backend**: ASP.NET Core 8 Web API (C#)
 - Frontend served on `http://localhost:4200`
 - Backend API on `http://localhost:5062`
