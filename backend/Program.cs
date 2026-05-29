@@ -96,7 +96,7 @@ app.Use(async (context, next) =>
         {
             HttpOnly = false,
             SameSite = SameSiteMode.Strict,
-            Secure = false,
+            Secure = !app.Environment.IsDevelopment(),
             Path = "/"
         });
     await next();
