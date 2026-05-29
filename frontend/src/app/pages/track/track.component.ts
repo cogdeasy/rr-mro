@@ -64,9 +64,8 @@ import { VarianceRequestSummary, STATUS_LABELS, STATUS_CSS, PagedResult } from '
             <tbody>
               <tr *ngFor="let r of requests"
                   [routerLink]="['/dashboard/requests', r.id]"
-                  style="border-top:1px solid var(--rr-border);cursor:pointer;transition:background 0.1s"
-                  onmouseenter="this.style.background='#F9FAFB'"
-                  onmouseleave="this.style.background='transparent'">
+                  class="table-row-hover"
+                  style="border-top:1px solid var(--rr-border);cursor:pointer;transition:background 0.1s">
                 <td style="padding:0.75rem 1rem;font-size:0.8125rem;font-weight:500;color:var(--rr-navy)">{{ r.referenceNumber }}</td>
                 <td style="padding:0.75rem 1rem;font-size:0.8125rem;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.title }}</td>
                 <td style="padding:0.75rem 1rem;font-size:0.8125rem;color:var(--rr-muted)">{{ r.engineType }}</td>

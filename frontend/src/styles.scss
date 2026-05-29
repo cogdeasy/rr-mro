@@ -193,3 +193,7 @@ a {
     color: var(--rr-muted);
   }
 }
+
+.table-row-hover {
+  &:hover { background: #F9FAFB; }
+}

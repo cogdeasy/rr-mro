@@ -1,26 +1,28 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace RR.MRO.Api.DTOs;
 
 public record CreateVarianceRequestDto(
-    string Title,
-    string Description,
-    string AnomalyType,
-    string EngineType,
-    string EngineSerialNumber,
-    string? PartNumber,
-    string? AircraftRegistration,
-    string Priority,
-    string SubmittedBy,
-    string MroOrganisation,
-    string? MroSiteLocation,
-    string? ShopVisitReference
+    [Required, StringLength(200, MinimumLength = 1)] string Title,
+    [Required, StringLength(5000, MinimumLength = 1)] string Description,
+    [Required, StringLength(100)] string AnomalyType,
+    [Required, StringLength(100)] string EngineType,
+    [Required, StringLength(50)] string EngineSerialNumber,
+    [StringLength(50)] string? PartNumber,
+    [StringLength(20)] string? AircraftRegistration,
+    [Required, StringLength(20)] string Priority,
+    [Required, StringLength(100)] string SubmittedBy,
+    [Required, StringLength(100)] string MroOrganisation,
+    [StringLength(200)] string? MroSiteLocation,
+    [StringLength(50)] string? ShopVisitReference
 );
 
 public record UpdateVarianceRequestDto(
-    string? Title,
-    string? Description,
-    string? Status,
-    string? Priority,
-    string? AssignedTo
+    [StringLength(200)] string? Title,
+    [StringLength(5000)] string? Description,
+    [StringLength(50)] string? Status,
+    [StringLength(20)] string? Priority,
+    [StringLength(100)] string? AssignedTo
 );
 
 public record VarianceRequestSummaryDto(
@@ -68,13 +70,13 @@ public record TriageRequestDto(
 
 public record DocumentAuthorDto(
     Guid RequestId,
-    string AuthoredBy
+    [Required, StringLength(100)] string AuthoredBy
 );
 
 public record AddCommentDto(
-    string Content,
-    string Author,
-    string AuthorRole,
+    [Required, StringLength(2000, MinimumLength = 1)] string Content,
+    [Required, StringLength(100)] string Author,
+    [Required, StringLength(100)] string AuthorRole,
     bool IsInternal
 );
 
@@ -86,6 +88,6 @@ public record PagedResult<T>(
 );
 
 public record UpdateStatusRequest(
-    string Status,
-    string Actor
+    [Required, StringLength(50)] string Status,
+    [Required, StringLength(100)] string Actor
 );

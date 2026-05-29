@@ -27,6 +27,9 @@ public class VarianceRequestsController : ControllerBase
         [FromQuery] string? sortBy = null,
         [FromQuery] string? sortDir = "desc")
     {
+        if (page < 1) page = 1;
+        if (pageSize < 1) pageSize = 20;
+        if (pageSize > 100) pageSize = 100;
         var result = _service.GetAll(page, pageSize, status, priority, engineType, mroOrganisation, search, sortBy, sortDir);
         return Ok(result);
     }
@@ -47,9 +50,9 @@ public class VarianceRequestsController : ControllerBase
             var request = _service.Create(dto);
             return CreatedAtAction(nameof(GetById), new { id = request.Id }, request);
         }
-        catch (ArgumentException ex)
+        catch (ArgumentException)
         {
-            return BadRequest(new { error = ex.Message });
+            return BadRequest(new { error = "Invalid request data." });
         }
     }
 
@@ -62,9 +65,9 @@ public class VarianceRequestsController : ControllerBase
             if (request == null) return NotFound();
             return Ok(request);
         }
-        catch (ArgumentException ex)
+        catch (ArgumentException)
         {
-            return BadRequest(new { error = ex.Message });
+            return BadRequest(new { error = "Invalid status value." });
         }
     }
 
