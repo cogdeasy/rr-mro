@@ -38,7 +38,7 @@ When an engine undergoing Maintenance, Repair & Overhaul (MRO) encounters an iss
 
 ## Tech Stack
 
-- **Frontend**: React 18 (Vite, TypeScript, React Router v6, TanStack Query, SCSS)
+- **Frontend**: React 19 (Vite, TypeScript, React Router v7, TanStack Query, SCSS)
 - **Backend**: ASP.NET Core 8 Web API (C#)
 - **AI/ML**: Azure OpenAI GPT-4, RAG over historical variances (Databricks)
 - **Infrastructure**: Azure App Service, Azure SQL, Azure Blob Storage
@@ -56,7 +56,7 @@ dotnet run
 # Swagger at http://localhost:5062/swagger
 ```
 
-### Frontend (React 18 + Vite)
+### Frontend (React 19 + Vite)
 
 ```bash
 cd frontend

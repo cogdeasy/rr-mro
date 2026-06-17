@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useStats } from '../hooks/useStats';
 import { useRequests } from '../hooks/useRequests';
 import './Overview.css';
 
 export default function Overview() {
+  const navigate = useNavigate();
   const [lastUpdated, setLastUpdated] = useState(new Date().toLocaleTimeString());
   const { data: stats, refetch: refetchStats } = useStats();
   const { data: recent, refetch: refetchRecent } = useRequests({
@@ -211,7 +212,7 @@ export default function Overview() {
             </thead>
             <tbody>
               {recent.items.slice(0, 6).map((r) => (
-                <tr key={r.id} className="clickable-row" onClick={() => { window.location.href = `/dashboard/requests/${r.id}`; }}>
+                <tr key={r.id} className="clickable-row" onClick={() => navigate(`/dashboard/requests/${r.id}`)}>
                   <td className="ref-cell">{r.referenceNumber}</td>
                   <td className="title-cell">{r.title}</td>
                   <td>{r.engineType}</td>

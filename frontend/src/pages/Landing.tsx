@@ -30,8 +30,8 @@ export default function Landing() {
               Digitising the technical variance process for the Rolls-Royce MRO network. AI-assisted triage, document authoring, and end-to-end workflow management across all engine programmes.
             </p>
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-              <Link to="/submit" className="btn-primary" style={{ fontSize: 15, padding: '0.875rem 2rem' }}>Submit Variance Request</Link>
-              <Link to="/track" className="btn-secondary" style={{ fontSize: 15, padding: '0.875rem 2rem' }}>Track Requests</Link>
+              <Link to="/dashboard/submit" className="btn-primary" style={{ fontSize: 15, padding: '0.875rem 2rem' }}>Submit Variance Request</Link>
+              <Link to="/dashboard/track" className="btn-secondary" style={{ fontSize: 15, padding: '0.875rem 2rem' }}>Track Requests</Link>
             </div>
           </div>
         </div>

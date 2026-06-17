@@ -9,9 +9,10 @@ import AiAssist from './pages/AiAssist';
 import Documents from './pages/Documents';
 import Triage from './pages/Triage';
 import Settings from './pages/Settings';
+import Landing from './pages/Landing';
 
 export const router = createBrowserRouter([
-  { path: '/', element: <Navigate to="/dashboard" replace /> },
+  { path: '/', element: <Landing /> },
   {
     path: '/dashboard',
     element: <DashboardLayout />,
