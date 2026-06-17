@@ -97,7 +97,7 @@ frontend/
     │   ├── Submit.tsx     # Variance request submission
     │   └── Track.tsx      # Request tracking
     ├── services/          # API service (axios)
-    └── router.tsx         # React Router v6 config
+    └── router.tsx         # React Router v7 config
 ```
 
 ## Key Workflows
