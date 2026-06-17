@@ -1,0 +1,111 @@
+import { useState } from 'react';
+import { useRequests } from '../hooks/useRequests';
+import { useTriageMutation, useGenerateDocumentMutation } from '../hooks/useMutations';
+
+export default function AiAssist() {
+  const { data } = useRequests({ page: 1, pageSize: 50 });
+  const requests = data?.items ?? [];
+
+  const triageCount = requests.filter((i) =>
+    ['TriageComplete', 'SpecialistOpinion', 'RecommendationDrafted', 'DocumentAuthored', 'Approved', 'Completed'].includes(i.status),
+  ).length;
+  const docCount = requests.filter((i) =>
+    ['DocumentAuthored', 'Approved', 'Completed'].includes(i.status),
+  ).length;
+  const initiateCount = data?.totalCount ?? 0;
+
+  const [selectedRequestId, setSelectedRequestId] = useState('');
+  const [selectedAgent, setSelectedAgent] = useState('triage');
+  const [agentResult, setAgentResult] = useState<object | null>(null);
+
+  const triageMutation = useTriageMutation();
+  const docMutation = useGenerateDocumentMutation();
+  const running = triageMutation.isPending || docMutation.isPending;
+
+  const runAgent = () => {
+    if (!selectedRequestId) return;
+    setAgentResult(null);
+    if (selectedAgent === 'triage') {
+      triageMutation.mutate(selectedRequestId, { onSuccess: (r) => setAgentResult(r) });
+    } else {
+      docMutation.mutate(
+        { requestId: selectedRequestId, authoredBy: 'Dr. J. Richardson' },
+        { onSuccess: (r) => setAgentResult(r) },
+      );
+    }
+  };
+
+  return (
+    <div style={{ padding: '2rem' }}>
+      <div style={{ marginBottom: '2rem' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.25rem' }}>AI Assist</h1>
+        <p style={{ fontSize: '0.875rem', color: 'var(--rr-muted)' }}>AI-powered document authoring and triage assistance</p>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
+        {[
+          { icon: '\u{1F916}', title: 'Initiate Agent', desc: 'Front-loads RFI questions to ensure complete submissions. Analyses request data and identifies missing information before triage.', label: 'Requests processed', count: initiateCount, color: '#8B5CF6' },
+          { icon: '\u{1F50D}', title: 'Scoping / Triage Agent', desc: 'Classifies anomaly severity using RAG over 15,000+ prior variances. Routes to appropriate specialist engineer and generates severity assessment.', label: 'Triages completed', count: triageCount, color: '#F59E0B' },
+          { icon: '\u{1F4C4}', title: 'Document Authoring Agent', desc: 'RAG-powered generation of 27-page regulated variance packages. 60-70% effort reduction with human-in-the-loop review.', label: 'Documents generated', count: docCount, color: 'var(--rr-gold)' },
+        ].map((agent) => (
+          <div key={agent.title} className="card" style={{ borderLeft: `3px solid ${agent.color}` }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+              <span style={{ fontSize: 24 }}>{agent.icon}</span>
+              <h3 style={{ fontSize: '0.875rem', fontWeight: 600 }}>{agent.title}</h3>
+            </div>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--rr-muted)', lineHeight: 1.5, marginBottom: '1rem' }}>{agent.desc}</p>
+            <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '0.75rem', borderTop: '1px solid var(--rr-border)' }}>
+              <span style={{ fontSize: '0.75rem', color: 'var(--rr-muted)' }}>{agent.label}</span>
+              <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>{agent.count}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="card" style={{ marginBottom: '2rem' }}>
+        <h3 style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: '1rem' }}>Run AI Agent</h3>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'end' }}>
+          <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+            <label>Select Request</label>
+            <select value={selectedRequestId} onChange={(e) => setSelectedRequestId(e.target.value)}>
+              <option value="">Choose a request...</option>
+              {requests.map((r) => <option key={r.id} value={r.id}>{r.referenceNumber} &mdash; {r.title}</option>)}
+            </select>
+          </div>
+          <div className="form-group" style={{ width: 200, marginBottom: 0 }}>
+            <label>Agent</label>
+            <select value={selectedAgent} onChange={(e) => setSelectedAgent(e.target.value)}>
+              <option value="triage">Scoping / Triage</option>
+              <option value="document">Document Authoring</option>
+            </select>
+          </div>
+          <button className="btn-navy" onClick={runAgent} disabled={!selectedRequestId || running} style={{ whiteSpace: 'nowrap' }}>
+            {running ? 'Processing...' : 'Run Agent'}
+          </button>
+        </div>
+      </div>
+
+      {agentResult && (
+        <div className="card" style={{ borderLeft: '3px solid #10B981' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+            <span style={{ fontSize: 18 }}>{'\u2728'}</span>
+            <h3 style={{ fontSize: '0.875rem', fontWeight: 600 }}>Agent Result</h3>
+          </div>
+          <pre style={{ fontSize: '0.8125rem', lineHeight: 1.6, whiteSpace: 'pre-wrap', color: 'var(--rr-muted)', background: 'var(--rr-platinum)', padding: '1rem', borderRadius: '0.375rem' }}>{JSON.stringify(agentResult, null, 2)}</pre>
+        </div>
+      )}
+
+      <div className="card" style={{ marginTop: '2rem', background: '#F0F9FF', border: '1px solid #BAE6FD' }}>
+        <div style={{ display: 'flex', alignItems: 'start', gap: '0.75rem' }}>
+          <span style={{ fontSize: 24 }}>{'\u{1F4A1}'}</span>
+          <div>
+            <h3 style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}>AI Architecture</h3>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--rr-muted)', lineHeight: 1.6 }}>
+              The AI Assist platform uses <strong>Azure OpenAI GPT-4</strong> with <strong>Retrieval Augmented Generation (RAG)</strong> on <strong>Databricks</strong>. The knowledge base includes 15,000+ historical variance resolutions, technical publications, AMM references, and regulatory guidance (EASA Part-145, FAA AC 43.13). All AI-generated content requires human-in-the-loop review before publication.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

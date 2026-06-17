@@ -4,9 +4,9 @@
 This is the Rolls-Royce MRO (Maintenance, Repair & Overhaul) Variance Platform. It digitises the Non-Conformance Technical Variance process for civil aerospace engines.
 
 ## Tech Stack
-- **Frontend**: Angular 17 (standalone components, SCSS, TypeScript)
+- **Frontend**: React 19 (Vite, TypeScript, React Router v7, TanStack Query, axios, SCSS)
 - **Backend**: ASP.NET Core 8 Web API (C#)
-- Frontend served on `http://localhost:4200`
+- Frontend served on `http://localhost:5173`
 - Backend API on `http://localhost:5062`
 - Swagger UI at `http://localhost:5062/swagger`
 
@@ -19,12 +19,15 @@ This is the Rolls-Royce MRO (Maintenance, Repair & Overhaul) Variance Platform. 
 - Logo: ROLLS-ROYCE wordmark in header component
 
 ## Frontend Conventions
-- All components are standalone (no NgModules)
-- Inline templates and styles in component `.ts` files
-- Pages in `src/app/pages/`
-- Shared models in `src/app/shared/models/`
-- API service in `src/app/shared/services/api.service.ts`
-- Layout components (header, footer, sidebar) in `src/app/pages/layout/`
+- Functional components with hooks
+- Pages in `src/pages/`
+- Shared models in `src/models/`
+- API service in `src/services/api.service.ts` (axios, returns Promises)
+- Layout components (Header, Footer, Sidebar) in `src/components/`
+- TanStack Query hooks in `src/hooks/`
+- Route config in `src/router.tsx`
+- Build: `npm run build` (Vite, outputs to `dist/`)
+- Test: `npx vitest run` (Vitest + React Testing Library)
 
 ## Backend Conventions
 - Controllers in `Controllers/`
