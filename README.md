@@ -38,7 +38,7 @@ When an engine undergoing Maintenance, Repair & Overhaul (MRO) encounters an iss
 
 ## Tech Stack
 
-- **Frontend**: Angular 17 (standalone components, SCSS, TypeScript)
+- **Frontend**: React 18 (Vite, TypeScript, React Router v6, TanStack Query, SCSS)
 - **Backend**: ASP.NET Core 8 Web API (C#)
 - **AI/ML**: Azure OpenAI GPT-4, RAG over historical variances (Databricks)
 - **Infrastructure**: Azure App Service, Azure SQL, Azure Blob Storage
@@ -56,13 +56,13 @@ dotnet run
 # Swagger at http://localhost:5062/swagger
 ```
 
-### Frontend (Angular 17)
+### Frontend (React 18 + Vite)
 
 ```bash
 cd frontend
 npm install
-ng serve
-# App at http://localhost:4200
+npm run dev
+# App at http://localhost:5173
 ```
 
 ## Project Structure
@@ -80,22 +80,24 @@ backend/
 └── Program.cs             # App configuration
 
 frontend/
-└── src/app/
-    ├── pages/
-    │   ├── landing/       # Home page
-    │   ├── submit/        # Variance request submission
-    │   ├── track/         # Request tracking
-    │   └── dashboard/     # Internal dashboard
-    │       ├── overview/  # KPI dashboard
-    │       ├── requests/  # Request management
-    │       ├── request-detail/  # Full request view
-    │       ├── ai-assist/ # AI agent runner
-    │       ├── documents/ # Document management
-    │       ├── triage/    # AI triage queue
-    │       └── settings/  # Platform config
-    └── shared/
-        ├── models/        # TypeScript interfaces
-        └── services/      # API service
+└── src/
+    ├── components/        # Header, Sidebar, Footer
+    ├── hooks/             # TanStack Query hooks
+    ├── layouts/           # DashboardLayout
+    ├── models/            # TypeScript interfaces
+    ├── pages/             # All page components
+    │   ├── Overview.tsx   # KPI dashboard
+    │   ├── Requests.tsx   # Request management
+    │   ├── RequestDetail.tsx  # Full request view
+    │   ├── AiAssist.tsx   # AI agent runner
+    │   ├── Documents.tsx  # Document management
+    │   ├── Triage.tsx     # AI triage queue
+    │   ├── Settings.tsx   # Platform config
+    │   ├── Landing.tsx    # Home page
+    │   ├── Submit.tsx     # Variance request submission
+    │   └── Track.tsx      # Request tracking
+    ├── services/          # API service (axios)
+    └── router.tsx         # React Router v6 config
 ```
 
 ## Key Workflows
