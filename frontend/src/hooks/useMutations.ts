@@ -8,6 +8,7 @@ export function useTriageMutation() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['request'] });
       qc.invalidateQueries({ queryKey: ['requests'] });
+      qc.invalidateQueries({ queryKey: ['stats'] });
     },
   });
 }
@@ -20,6 +21,7 @@ export function useGenerateDocumentMutation() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['request'] });
       qc.invalidateQueries({ queryKey: ['requests'] });
+      qc.invalidateQueries({ queryKey: ['stats'] });
     },
   });
 }
@@ -30,6 +32,7 @@ export function useCreateRequestMutation() {
     mutationFn: (data: Record<string, unknown>) => apiService.createRequest(data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['requests'] });
+      qc.invalidateQueries({ queryKey: ['stats'] });
     },
   });
 }
@@ -42,6 +45,7 @@ export function useUpdateStatusMutation() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['request'] });
       qc.invalidateQueries({ queryKey: ['requests'] });
+      qc.invalidateQueries({ queryKey: ['stats'] });
     },
   });
 }

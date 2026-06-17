@@ -11,7 +11,7 @@ export default function Overview() {
   const { data: recent, refetch: refetchRecent } = useRequests({
     page: 1,
     pageSize: 6,
-    sortBy: 'date',
+    sortBy: 'createdAt',
     sortDir: 'desc',
   });
 
