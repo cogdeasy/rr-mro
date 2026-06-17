@@ -125,7 +125,7 @@ export default function Submit() {
                   </div>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-                  <Link to="/" className="btn-outline">Cancel</Link>
+                  <Link to="/dashboard" className="btn-outline">Cancel</Link>
                   <button type="submit" className="btn-navy" disabled={createMutation.isPending}>
                     {createMutation.isPending ? 'Submitting...' : 'Submit Request'}
                   </button>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRequests } from '../hooks/useRequests';
-import { apiService } from '../services/api.service';
+import { useTriageMutation, useGenerateDocumentMutation } from '../hooks/useMutations';
 
 export default function AiAssist() {
   const { data } = useRequests({ page: 1, pageSize: 50 });
@@ -16,20 +16,23 @@ export default function AiAssist() {
 
   const [selectedRequestId, setSelectedRequestId] = useState('');
   const [selectedAgent, setSelectedAgent] = useState('triage');
-  const [running, setRunning] = useState(false);
   const [agentResult, setAgentResult] = useState<object | null>(null);
+
+  const triageMutation = useTriageMutation();
+  const docMutation = useGenerateDocumentMutation();
+  const running = triageMutation.isPending || docMutation.isPending;
 
   const runAgent = () => {
     if (!selectedRequestId) return;
-    setRunning(true);
     setAgentResult(null);
-    const promise =
-      selectedAgent === 'triage'
-        ? apiService.triageRequest(selectedRequestId)
-        : apiService.generateDocument(selectedRequestId, 'Dr. J. Richardson');
-    promise
-      .then((r) => { setAgentResult(r); setRunning(false); })
-      .catch(() => setRunning(false));
+    if (selectedAgent === 'triage') {
+      triageMutation.mutate(selectedRequestId, { onSuccess: (r) => setAgentResult(r) });
+    } else {
+      docMutation.mutate(
+        { requestId: selectedRequestId, authoredBy: 'Dr. J. Richardson' },
+        { onSuccess: (r) => setAgentResult(r) },
+      );
+    }
   };
 
   return (
