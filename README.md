@@ -38,7 +38,7 @@ When an engine undergoing Maintenance, Repair & Overhaul (MRO) encounters an iss
 
 ## Tech Stack
 
-- **Frontend**: Angular 17 (standalone components, SCSS, TypeScript)
+- **Frontend**: React 18 (Vite, TypeScript, SCSS, React Router)
 - **Backend**: ASP.NET Core 8 Web API (C#)
 - **AI/ML**: Azure OpenAI GPT-4, RAG over historical variances (Databricks)
 - **Infrastructure**: Azure App Service, Azure SQL, Azure Blob Storage
@@ -56,12 +56,12 @@ dotnet run
 # Swagger at http://localhost:5062/swagger
 ```
 
-### Frontend (Angular 17)
+### Frontend (React 18)
 
 ```bash
 cd frontend
 npm install
-ng serve
+npm run dev
 # App at http://localhost:4200
 ```
 
