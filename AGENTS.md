@@ -4,9 +4,9 @@
 This is the Rolls-Royce MRO (Maintenance, Repair & Overhaul) Variance Platform. It digitises the Non-Conformance Technical Variance process for civil aerospace engines.
 
 ## Tech Stack
-- **Frontend**: Angular 17 (standalone components, SCSS, TypeScript)
+- **Frontend**: React 19 + TypeScript (Vite, react-router-dom)
 - **Backend**: ASP.NET Core 8 Web API (C#)
-- Frontend served on `http://localhost:4200`
+- Frontend served on `http://localhost:5173`
 - Backend API on `http://localhost:5062`
 - Swagger UI at `http://localhost:5062/swagger`
 
@@ -19,12 +19,13 @@ This is the Rolls-Royce MRO (Maintenance, Repair & Overhaul) Variance Platform. 
 - Logo: ROLLS-ROYCE wordmark in header component
 
 ## Frontend Conventions
-- All components are standalone (no NgModules)
-- Inline templates and styles in component `.ts` files
-- Pages in `src/app/pages/`
-- Shared models in `src/app/shared/models/`
-- API service in `src/app/shared/services/api.service.ts`
-- Layout components (header, footer, sidebar) in `src/app/pages/layout/`
+- Functional components with hooks (useState, useEffect, useParams)
+- Pages in `src/pages/`
+- Shared models in `src/shared/models/`
+- API service in `src/shared/services/api.ts` (plain async functions using fetch)
+- Layout components (header, footer, sidebar) in `src/pages/layout/`
+- Routing via react-router-dom with nested routes and `<Outlet>`
+- Global styles in `src/styles.css` with CSS custom properties
 
 ## Backend Conventions
 - Controllers in `Controllers/`
