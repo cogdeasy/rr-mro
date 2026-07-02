@@ -4,9 +4,9 @@
 This is the Rolls-Royce MRO (Maintenance, Repair & Overhaul) Variance Platform. It digitises the Non-Conformance Technical Variance process for civil aerospace engines.
 
 ## Tech Stack
-- **Frontend**: Angular 17 (standalone components, SCSS, TypeScript)
+- **Frontend**: React 18 + TypeScript (Vite, React Router, SCSS)
 - **Backend**: ASP.NET Core 8 Web API (C#)
-- Frontend served on `http://localhost:4200`
+- Frontend served on `http://localhost:4200` (Vite dev server)
 - Backend API on `http://localhost:5062`
 - Swagger UI at `http://localhost:5062/swagger`
 
@@ -19,12 +19,15 @@ This is the Rolls-Royce MRO (Maintenance, Repair & Overhaul) Variance Platform. 
 - Logo: ROLLS-ROYCE wordmark in header component
 
 ## Frontend Conventions
-- All components are standalone (no NgModules)
-- Inline templates and styles in component `.ts` files
-- Pages in `src/app/pages/`
-- Shared models in `src/app/shared/models/`
-- API service in `src/app/shared/services/api.service.ts`
-- Layout components (header, footer, sidebar) in `src/app/pages/layout/`
+- Functional components with hooks (useState, useEffect)
+- React Router for navigation (NavLink for active-state styling)
+- Native fetch for API calls (services/api.ts)
+- Pages in `src/pages/` (dashboard sub-pages in `src/pages/dashboard/`)
+- Shared models and constants in `src/models/`
+- API service in `src/services/api.ts`
+- Layout components (Header, Sidebar, Footer, DashboardLayout) in `src/components/layout/`
+- SCSS modules for component-specific styles
+- Global styles and CSS variables in `src/styles.scss`
 
 ## Backend Conventions
 - Controllers in `Controllers/`

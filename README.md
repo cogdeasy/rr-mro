@@ -38,7 +38,7 @@ When an engine undergoing Maintenance, Repair & Overhaul (MRO) encounters an iss
 
 ## Tech Stack
 
-- **Frontend**: Angular 17 (standalone components, SCSS, TypeScript)
+- **Frontend**: React 18 + TypeScript (Vite, React Router, SCSS)
 - **Backend**: ASP.NET Core 8 Web API (C#)
 - **AI/ML**: Azure OpenAI GPT-4, RAG over historical variances (Databricks)
 - **Infrastructure**: Azure App Service, Azure SQL, Azure Blob Storage
@@ -56,12 +56,12 @@ dotnet run
 # Swagger at http://localhost:5062/swagger
 ```
 
-### Frontend (Angular 17)
+### Frontend (React 18)
 
 ```bash
 cd frontend
 npm install
-ng serve
+npm run dev
 # App at http://localhost:4200
 ```
 
@@ -80,22 +80,25 @@ backend/
 └── Program.cs             # App configuration
 
 frontend/
-└── src/app/
-    ├── pages/
-    │   ├── landing/       # Home page
-    │   ├── submit/        # Variance request submission
-    │   ├── track/         # Request tracking
-    │   └── dashboard/     # Internal dashboard
-    │       ├── overview/  # KPI dashboard
-    │       ├── requests/  # Request management
-    │       ├── request-detail/  # Full request view
-    │       ├── ai-assist/ # AI agent runner
-    │       ├── documents/ # Document management
-    │       ├── triage/    # AI triage queue
-    │       └── settings/  # Platform config
-    └── shared/
-        ├── models/        # TypeScript interfaces
-        └── services/      # API service
+└── src/
+    ├── main.tsx           # React entry point
+    ├── App.tsx            # Router configuration
+    ├── styles.scss        # Global styles & CSS variables
+    ├── models/            # TypeScript interfaces & constants
+    ├── services/          # API service (fetch-based)
+    ├── components/
+    │   └── layout/        # Header, Sidebar, Footer, DashboardLayout
+    └── pages/
+        ├── Submit.tsx     # Variance request submission
+        ├── Track.tsx      # Request tracking
+        └── dashboard/    # Internal dashboard pages
+            ├── Overview.tsx       # KPI dashboard
+            ├── Requests.tsx       # Request management
+            ├── RequestDetail.tsx  # Full request view
+            ├── AiAssist.tsx       # AI agent runner
+            ├── Documents.tsx      # Document management
+            ├── Triage.tsx         # AI triage queue
+            └── Settings.tsx       # Platform config
 ```
 
 ## Key Workflows
