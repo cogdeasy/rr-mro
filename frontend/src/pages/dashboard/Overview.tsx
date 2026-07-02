@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getStats, getRequests } from '../../services/api';
 import { DashboardStats, VarianceRequestSummary } from '../../models/variance-request';
 import './Overview.scss';
 
 export default function Overview() {
+  const navigate = useNavigate();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [recentRequests, setRecentRequests] = useState<VarianceRequestSummary[]>([]);
   const [lastUpdated, setLastUpdated] = useState(new Date().toLocaleTimeString());
@@ -255,7 +256,7 @@ export default function Overview() {
             </thead>
             <tbody>
               {recentRequests.slice(0, 6).map(r => (
-                <tr key={r.id} className="clickable-row" onClick={() => window.location.href = `/dashboard/requests/${r.id}`}>
+                <tr key={r.id} className="clickable-row" onClick={() => navigate(`/dashboard/requests/${r.id}`)}>
                   <td className="ref-cell">{r.referenceNumber}</td>
                   <td className="title-cell">{r.title}</td>
                   <td>{r.engineType}</td>

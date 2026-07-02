@@ -10,6 +10,14 @@ import {
 
 const BASE_URL = 'http://localhost:5062/api';
 
+async function handleResponse<T>(res: Response): Promise<T> {
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`API error ${res.status}: ${body}`);
+  }
+  return res.json();
+}
+
 function buildParams(params?: Record<string, string | number | undefined>): string {
   if (!params) return '';
   const sp = new URLSearchParams();
@@ -34,12 +42,12 @@ export async function getRequests(params?: {
   sortDir?: string;
 }): Promise<PagedResult<VarianceRequestSummary>> {
   const res = await fetch(`${BASE_URL}/variancerequests${buildParams(params)}`);
-  return res.json();
+  return handleResponse<PagedResult<VarianceRequestSummary>>(res);
 }
 
 export async function getRequest(id: string): Promise<VarianceRequest> {
   const res = await fetch(`${BASE_URL}/variancerequests/${id}`);
-  return res.json();
+  return handleResponse<VarianceRequest>(res);
 }
 
 export async function createRequest(data: Record<string, unknown>): Promise<VarianceRequest> {
@@ -48,7 +56,7 @@ export async function createRequest(data: Record<string, unknown>): Promise<Vari
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-  return res.json();
+  return handleResponse<VarianceRequest>(res);
 }
 
 export async function updateStatus(id: string, status: string, actor: string): Promise<VarianceRequest> {
@@ -57,7 +65,7 @@ export async function updateStatus(id: string, status: string, actor: string): P
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ status, actor }),
   });
-  return res.json();
+  return handleResponse<VarianceRequest>(res);
 }
 
 export async function addComment(
@@ -69,12 +77,12 @@ export async function addComment(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-  return res.json();
+  return handleResponse<Comment>(res);
 }
 
 export async function getStats(): Promise<DashboardStats> {
   const res = await fetch(`${BASE_URL}/variancerequests/stats`);
-  return res.json();
+  return handleResponse<DashboardStats>(res);
 }
 
 export async function triageRequest(requestId: string): Promise<TriageResult> {
@@ -83,7 +91,7 @@ export async function triageRequest(requestId: string): Promise<TriageResult> {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({}),
   });
-  return res.json();
+  return handleResponse<TriageResult>(res);
 }
 
 export async function generateDocument(requestId: string, authoredBy: string): Promise<VarianceDocument> {
@@ -92,25 +100,25 @@ export async function generateDocument(requestId: string, authoredBy: string): P
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ requestId, authoredBy }),
   });
-  return res.json();
+  return handleResponse<VarianceDocument>(res);
 }
 
 export async function getDocument(requestId: string): Promise<VarianceDocument> {
   const res = await fetch(`${BASE_URL}/documents/${requestId}`);
-  return res.json();
+  return handleResponse<VarianceDocument>(res);
 }
 
 export async function getEngineTypes(): Promise<string[]> {
   const res = await fetch(`${BASE_URL}/variancerequests/engine-types`);
-  return res.json();
+  return handleResponse<string[]>(res);
 }
 
 export async function getMroOrganisations(): Promise<string[]> {
   const res = await fetch(`${BASE_URL}/variancerequests/mro-organisations`);
-  return res.json();
+  return handleResponse<string[]>(res);
 }
 
 export async function getAnomalyTypes(): Promise<string[]> {
   const res = await fetch(`${BASE_URL}/variancerequests/anomaly-types`);
-  return res.json();
+  return handleResponse<string[]>(res);
 }
